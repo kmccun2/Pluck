@@ -60,3 +60,59 @@ body {
   margin-top: 30vh;
   border-radius: 5px;
 }
+
+// Table styles
+// Header
+.header {
+  height: 150px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+// Playing table
+.table {
+  flex-grow: 1;
+  flex-basis: 500px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 40px;
+}
+
+.table-left,
+.table-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.table-middle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card {
+  border: 1px solid black;
+  height: 200px;
+  width: 130px;
+  min-width: 130px;
+  border-radius: 5px;
+}
+// Player hand
+.hand {
+  height: 250px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 120px 0 15px;
+}
+
+.hand .card {
+  cursor: pointer;
+  background-color: white;
+  position: relative;
+  margin-right: -100px;
+}
