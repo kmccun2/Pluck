@@ -6,15 +6,17 @@ import Hand from '../dashboard/Hand'
 import { setAlert } from '../../actions/alert'
 import { newGame } from '../../actions/table'
 import { connect } from 'react-redux'
-import { PopUp } from '../popups/PopUp'
+import PopUp from '../../components/popups/PopUp'
 
-const Dashboard = ({ setAlert, greeting, newGame, players }) => {
+const Dashboard = ({ popup, newGame, players, teams, dealer, trump }) => {
   return (
     <Fragment>
       <Alert />
-      {greeting ? <PopUp type={'greeting'} newGame={newGame} /> : null}
+      {popup !== undefined ? (
+        <PopUp popup={popup} newGame={newGame} dealer={dealer} trump={trump} />
+      ) : null}
       <div className='my-container'>
-        <Header />
+        <Header teams={teams} trump={trump} />
         <Table />
         <Hand player={players[0]} />
       </div>
@@ -23,9 +25,12 @@ const Dashboard = ({ setAlert, greeting, newGame, players }) => {
 }
 
 const mapStateToProps = (state) => ({
-  greeting: state.table.greeting,
+  popup: state.table.popup,
   players: state.table.players,
   deck: state.table.deck,
+  dealer: state.table.dealer,
+  trump: state.table.trump,
+  teams: state.table.teams,
 })
 
 export default connect(mapStateToProps, { setAlert, newGame })(Dashboard)

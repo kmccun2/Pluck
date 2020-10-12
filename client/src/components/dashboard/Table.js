@@ -8,7 +8,7 @@ const Table = () => {
       <div className='table'>
         {/* Player 2 */}
         <div className='table-left'>
-          <TableCard />
+          <TableCard rotate={true} />
         </div>
         <div className='table-middle'>
           {/* Player 3 */}
@@ -18,7 +18,7 @@ const Table = () => {
         </div>
         <div className='table-right'>
           {/* Player 4 */}
-          <TableCard />
+          <TableCard rotate={true} />
         </div>
       </div>
     </Fragment>

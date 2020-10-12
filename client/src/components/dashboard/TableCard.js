@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react'
 
-const TableCard = () => {
+const TableCard = ({ rotate }) => {
   return (
     <Fragment>
-      <div className='card'>TableCard</div>
+      <div className={rotate ? 'card rotate' : 'card'}></div>
     </Fragment>
   )
 }

@@ -1,4 +1,9 @@
-import { NEW_GAME, SET_TABLE_LOADING } from './types'
+import {
+  NEW_GAME,
+  SET_TABLE_LOADING,
+  HANDLE_TRUMP_MESSAGE,
+  SELECT_TRUMP,
+} from './types'
 
 export const newGame = () => (dispatch) => {
   dispatch({
@@ -80,15 +85,60 @@ export const newGame = () => (dispatch) => {
       bg: 'QD',
     },
     { id: 51, card: 'King of Diamonds', value: 13, suit: 'Diamonds', bg: 'KD' },
-    { id: 42, card: 'Ace of Diamonds', value: 14, suit: 'Diamonds', bg: 'AD' },
+    { id: 52, card: 'Ace of Diamonds', value: 14, suit: 'Diamonds', bg: 'AD' },
   ]
+  let dealer = undefined
+  let popup = undefined
+  let trump = undefined
 
   // Deal out cards
   deal(players, deck)
 
+  // Select dealer
+  players.map((one) => {
+    one.hand.map((card) => {
+      // Whoever receives the 2 of spades is the dealer
+      if (card.id === 1) {
+        dealer = one
+        if (dealer.id == 1) {
+          popup = 'mytrump'
+        } else {
+          // If the user does not have the 2 of clubs they must select the trump suit
+          popup = 'opptrump'
+          trump = computeTrump(players, dealer, trump)
+        }
+      }
+      return card
+    })
+    return one
+  })
+
   dispatch({
     type: NEW_GAME,
-    payload: { players: players, teams: teams },
+    payload: {
+      players: players,
+      teams: teams,
+      dealer: dealer,
+      popup: popup,
+      trump: trump,
+    },
+  })
+}
+
+// User selects trump
+export const selectTrump = (suit) => async (dispatch) => {
+  dispatch({
+    type: SELECT_TRUMP,
+    payload: {
+      trump: suit,
+    },
+  })
+}
+
+// Close the message that displays when an opponent is the dealer
+export const handleTrumpMessage = () => async (dispatch) => {
+  dispatch({
+    type: HANDLE_TRUMP_MESSAGE,
   })
 }
 
@@ -124,10 +174,53 @@ const deal = (players, deck) => {
     } else if (players[3].hand.length < 13) {
       players[3].hand.push(card_delt)
     }
-
-    // Sort user's hand
-    players[0].hand = players[0].hand.sort(function (a, b) {
-      return a.id - b.id
-    })
   }
+  // Sort user's hand
+  players[0].hand = players[0].hand.sort(function (a, b) {
+    return a.id - b.id
+  })
+}
+
+// Trump suit is selected
+const computeTrump = (players, dealer, trump) => {
+  let hearts = 0
+  let diamonds = 0
+  let clubs = 0
+  let spades = 0
+  // Iterate through players to find dealer
+  players.map((player) => {
+    if (player.id === dealer.id) {
+      // Look through dealer's hand and count amount of each suit and select highest for trump
+      player.hand.map((card) => {
+        if (card.suit === 'Hearts') {
+          hearts += 1
+        }
+        if (card.suit === 'Diamonds') {
+          diamonds += 1
+        }
+        if (card.suit === 'Clubs') {
+          clubs += 1
+        }
+        if (card.suit === 'Spades') {
+          spades += 1
+        }
+      })
+      // Select Trump
+      if (hearts >= diamonds && hearts >= clubs && hearts >= spades) {
+        trump = 'Hearts'
+      } else if (
+        diamonds >= hearts &&
+        diamonds >= clubs &&
+        diamonds >= spades
+      ) {
+        trump = 'Diamonds'
+      } else if (clubs >= hearts && clubs >= diamonds && clubs >= spades) {
+        trump = 'Clubs'
+      } else {
+        trump = 'Spades'
+      }
+    }
+    return player
+  })
+  return trump
 }
