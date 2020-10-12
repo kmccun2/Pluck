@@ -1,9 +1,14 @@
 import React, { Fragment } from 'react'
 
-const HandCard = () => {
+const HandCard = ({ card, bg }) => {
   return (
     <Fragment>
-      <div className='card'>HandCard</div>
+      <div
+        className='card'
+        style={{
+          backgroundImage: `url(${require('../../img/PNG/' + bg + '.png')})`,
+        }}
+      ></div>
     </Fragment>
   )
 }

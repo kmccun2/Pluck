@@ -34,6 +34,8 @@ body {
   width: 100%;
   height: auto;
   min-height: 100vh;
+  background-image: url(./img/PNG/table_felt.png);
+  background-size: cover;
 }
 
 // ALERT
@@ -61,6 +63,21 @@ body {
   border-radius: 5px;
 }
 
+// Greeting
+.popups-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+.greeting {
+  height: 350px;
+  width: 500px;
+  max-width: 100vw;
+  background-color: #d9d9d9;
+}
 // Table styles
 // Header
 .header {
@@ -95,11 +112,11 @@ body {
 }
 
 .card {
-  border: 1px solid black;
   height: 200px;
   width: 130px;
   min-width: 130px;
   border-radius: 5px;
+  background-size: 101%;
 }
 // Player hand
 .hand {
