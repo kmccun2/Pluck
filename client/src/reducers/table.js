@@ -3,15 +3,20 @@ import {
   SET_TABLE_LOADING,
   HANDLE_TRUMP_MESSAGE,
   SELECT_TRUMP,
+  MAKE_THROW
 } from '../actions/types'
 
 const initialState = {
   players: {},
   teams: {},
+  throws: [],
+  cardsleft: [],
   dealer: undefined,
   loading: true,
+  lead: undefined,
   trump: undefined,
   popup: 'greeting',
+  player_turn: undefined,
   error: {},
 }
 
@@ -40,10 +45,27 @@ export default function (state = initialState, action) {
         ...state,
         players: payload.players,
         teams: payload.teams,
-        loading: false,
         dealer: payload.dealer,
         popup: payload.popup,
         trump: payload.trump,
+        player_turn: payload.player_turn,
+        cardsleft: payload.cardsleft,
+        lead: payload.lead,
+        loading: false,
+      }
+    case MAKE_THROW:
+      return {
+        ...state,
+        players: payload.players,
+        teams: payload.teams,
+        dealer: payload.dealer,
+        popup: payload.popup,
+        trump: payload.trump,
+        player_turn: payload.player_turn,
+        throws: payload.throws,
+        cardsleft: payload.cardsleft,
+        lead: payload.lead,
+        loading: false,
       }
     default:
       return state

@@ -3,6 +3,7 @@ import {
   SET_TABLE_LOADING,
   HANDLE_TRUMP_MESSAGE,
   SELECT_TRUMP,
+  MAKE_THROW,
 } from './types'
 
 export const newGame = () => (dispatch) => {
@@ -87,9 +88,13 @@ export const newGame = () => (dispatch) => {
     { id: 51, card: 'King of Diamonds', value: 13, suit: 'Diamonds', bg: 'KD' },
     { id: 52, card: 'Ace of Diamonds', value: 14, suit: 'Diamonds', bg: 'AD' },
   ]
+  let throws = []
+  let cardsleft = deck
   let dealer = undefined
   let popup = undefined
+  let lead = undefined
   let trump = undefined
+  let player_turn = undefined
 
   // Deal out cards
   deal(players, deck)
@@ -100,6 +105,8 @@ export const newGame = () => (dispatch) => {
       // Whoever receives the 2 of spades is the dealer
       if (card.id === 1) {
         dealer = one
+        lead = one.id
+        player_turn = one.id
         if (dealer.id == 1) {
           popup = 'mytrump'
         } else {
@@ -121,6 +128,9 @@ export const newGame = () => (dispatch) => {
       dealer: dealer,
       popup: popup,
       trump: trump,
+      player_turn: player_turn,
+      cardsleft: cardsleft,
+      lead: lead,
     },
   })
 }
@@ -139,6 +149,122 @@ export const selectTrump = (suit) => async (dispatch) => {
 export const handleTrumpMessage = () => async (dispatch) => {
   dispatch({
     type: HANDLE_TRUMP_MESSAGE,
+  })
+}
+
+// Throws start once trump is selected
+export const makeThrow = (players, dealer, teams, trump, popup, throws, cardsleft, player_turn, lead, selected) => async (dispatch
+  
+) => {
+  // If it is a computer player's turn, make a throw
+  if (player_turn !== 1 && throws.length < 4) {
+    // Select player whose turn it is
+    players.map(player=>{
+      if (player.id === player_turn) {
+        /////////////////
+        // First Throw //
+        /////////////////
+        if (throws.length == 0) {
+          let throwcard = undefined
+          // If player has a winner that isn't the trump suit, throw it
+          player.hand.map(card=>{
+            if (cardsleft.filter(each=>each.value > card.value && each.suit == card.suit).length == 0 && card.suit !== trump) {
+              throwcard = card       
+              }
+          })
+          // If player does not have a winner, throw the lowest card in that suit
+          let lowvalue = 100
+          if (throwcard !== undefined) lowvalue = 0
+          player.hand.map(card=>{
+            if (card.value < lowvalue && card.suit !== trump) {
+              throwcard = card
+              lowvalue = card.value     
+              }
+          })
+          // Add card to table (throws)
+          throws.push(throwcard)
+        }
+        /////////////////////////
+        // Second/Third Throw  //
+        /////////////////////////
+        else if (throws.length == 1 || throws.length == 2) {
+          let throwcard = undefined
+          // If player has a winner that is the same as the trump suit, throw it
+          player.hand.map(card=>{
+            if (cardsleft.filter(each=>each.value > card.value && each.suit == card.suit).length == 0 && card.suit === throws[0].suit) {
+              throwcard = card       
+              }
+          })
+          // If player does not have a winner, throw the lowest card in that suit
+          let lowvalue = 100
+          if (throwcard !== undefined) lowvalue = 0
+          player.hand.map(card=>{
+            if (card.value < lowvalue && card.suit === throws[0].suit) {
+              throwcard = card
+              lowvalue = card.value     
+              }
+          })
+          // Add card to table (throws)
+          throws.push(throwcard)
+        }
+        ////////////////
+        // Last Throw //
+        ////////////////
+        else if (throws.length == 3) {
+          let throwcard = undefined
+          // If player has a winner that is the same as the trump suit, throw the lowest winner
+          let currentvalue = undefined
+          player.hand.map(card=>{
+            if (cardsleft.filter(each=>each.value > card.value && each.suit == card.suit).length == 0 && card.suit === throws[0].suit && card.value < currentvalue) {
+              throwcard = card   
+              }
+          })
+          // If player does not have a winner, throw the lowest card in that suit
+          let lowvalue = 100
+          if (throwcard !== undefined) lowvalue = 0
+          player.hand.map(card=>{
+            if (card.value < lowvalue && card.suit === throws[0].suit) {
+              throwcard = card
+              lowvalue = card.value     
+              }
+          })
+          // Add card to table (throws)
+          throws.push(throwcard)
+        }
+      }
+    })
+    // User throw
+  } else if (player_turn == 1 && selected !== undefined) {
+    throws.push(selected)
+    popup = undefined
+  }
+
+    // Change turn to next player
+    player_turn = lead + throws.length
+    if (player_turn === 5) player_turn = 1
+    if (player_turn === 6) player_turn = 2
+    if (player_turn === 7) player_turn = 3
+  
+    // All cards are thrown
+    if (throws.length === 4) {
+      // Remove cards from deck
+      cardsleft = cardsleft.filter(cardleft=>cardleft.id !== throws[0].id && cardleft.id !== throws[1].id && cardleft.id !== throws[2].id && cardleft.id !== throws[3].id)
+    }
+
+
+  dispatch({
+    type: MAKE_THROW,
+    payload: {
+      players: players,
+      dealer: dealer,
+      teams: teams,
+      popup: popup,
+      trump: trump,
+      throws: throws,
+      cardsleft: cardsleft,
+      player_turn: player_turn,
+      lead: lead,
+    },
   })
 }
 
