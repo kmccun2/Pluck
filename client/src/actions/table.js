@@ -254,6 +254,12 @@ export const makeThrow = (
       if (winningplayer === 1 || winningplayer === 3) teams[0].tricks += 1
       else if (winningplayer === 2 || winningplayer === 4) teams[1].tricks += 1
 
+      // Add glow to winning card
+      if (winningplayer === 1) players[0].throw.winner = true
+      if (winningplayer === 2) players[1].throw.winner = true
+      if (winningplayer === 3) players[2].throw.winner = true
+      if (winningplayer === 4) players[3].throw.winner = true
+
       lead = winningplayer
       player_turn = lead
     }
