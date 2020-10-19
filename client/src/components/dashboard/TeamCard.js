@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import Plucks from './Plucks'
+import Tricks from './Tricks'
 
 const TeamCard = ({ team }) => {
   return (
@@ -12,25 +14,17 @@ const TeamCard = ({ team }) => {
             </div>
           </div>
           <div className='team-score'>
-            <div>Tricks </div>
-            <div>Plucks </div>
-          </div>
-          <div className='team-icons'>
-            <div></div>
-            <div></div>
+            <div className='tricks-container'><div>Tricks </div><Tricks teamdealer={true} tricks={team.tricks} /></div>
+      <div className='plucks-container'><div>Plucks </div><Plucks teamdealer={true} /></div>
           </div>
         </Fragment>
       )}
       {/* Team 2 */}
       {team && team.id === 2 && (
         <Fragment>
-          <div className='team-icons'>
-            <div></div>
-            <div></div>
-          </div>
-          <div className='team-score' style={{ textAlign: 'right' }}>
-            <div>Tricks </div>
-            <div>Plucks </div>
+          <div className='team-score' style={{ alignItems: 'flex-end'}}>
+            <div className='tricks-container'><Tricks teamdealer={true} tricks={team.tricks}/><div>Tricks </div></div>
+      <div className='plucks-container'><Plucks teamdealer={true} /><div>Plucks </div></div>
           </div>
           <div className='team-name-container'>
             <div className='team-name' style={{ transform: 'rotate(90deg)' }}>

@@ -108,7 +108,7 @@ body {
   justify-content: space-between;
   width: 100%;
   color: white;
-  background-color: #0000005c;
+  background-color: #0000009e;
   padding: 10px 0;
 }
 .team-card {
@@ -128,11 +128,11 @@ body {
   color: white;
 }
 .team-score {
-  width: 70px;
+  flex-grow: 1;
   display: flex;
   color: white;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: initial;
   font-weight: bold;
 }
 .team-icons {
@@ -141,6 +141,25 @@ body {
 .trump-title {
   font-weight: bold;
   font-size: 20px;
+}
+.tricks-container,
+.plucks-container {
+  display: flex;
+  height: 50%;
+  align-items: center;
+}
+.tricks,
+.plucks {
+  display: flex;
+  padding: 0 15px;
+}
+.trick,
+.pluck {
+  height: 25px;
+  width: 25px;
+  margin: 0 3px;
+  background-color: white;
+  border-radius: 50%;
 }
 // Playing table
 .table {

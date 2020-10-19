@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { handleTrumpMessage } from '../../actions/table'
 import { ImSpades, ImHeart, ImClubs, ImDiamonds } from 'react-icons/im'
@@ -11,6 +11,7 @@ const PopUp = ({
   handleTrumpMessage,
   trump,
   selectTrump,
+  players,
 }) => {
   return (
     <div className='popups-container'>
@@ -32,25 +33,25 @@ const PopUp = ({
             <ImSpades
               size={50}
               color='9c9c9c'
-              onClick={() => selectTrump('Spades')}
+              onClick={() => selectTrump('Spades', players)}
               className={'icon'}
             />
             <ImHeart
               size={50}
               color='d02000'
-              onClick={() => selectTrump('Hearts')}
+              onClick={() => selectTrump('Hearts', players)}
               className={'icon'}
             />
             <ImClubs
               size={50}
               color='9c9c9c'
-              onClick={() => selectTrump('Clubs')}
+              onClick={() => selectTrump('Clubs', players)}
               className={'icon'}
             />
             <ImDiamonds
               size={50}
               color='d02000'
-              onClick={() => selectTrump('Diamonds')}
+              onClick={() => selectTrump('Diamonds', players)}
               className={'icon'}
             />
           </div>
